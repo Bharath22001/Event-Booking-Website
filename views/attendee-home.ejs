@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title><%= siteName %> - Attendee Home</title>
+    <style>
+        /* Ensure the table matches the width of .site-info */
+        .events-table {
+            width: 100%;
+            max-width: 800px; /* Matches the max-width of .site-info */
+            margin: 1.5rem auto;
+            border-collapse: collapse;
+        }
+
+        .events-table th, .events-table td {
+            padding: 1rem; /* Add spacing between columns */
+            text-align: left;
+            border-bottom: 1px solid #ddd; /* Add subtle row separation */
+        }
+
+        .events-table th {
+            background-color: #f0f9ff; /* Light background for header */
+            color: #0369a1; /* Darker blue text for header */
+        }
+
+        .events-table tr:nth-child(even) {
+            background-color: #f9f9f9; /* Zebra striping for rows */
+        }
+
+        .events-table tr:hover {
+            background-color: #e3f2fd; /* Light blue hover effect */
+        }
+
+        .site-info {
+            max-width: 800px; /* Ensure table and site-info match widths */
+        }
+    </style>
+</head>
+<body class="attendee-content">  
+    <div class="site-info">
+        <h2>Arcanum</h2>
+        <p>Conjure tickets with magically low prices</p>
+    </div>
+
+    <h2>Upcoming Events</h2>
+    <% if (events && events.length > 0) { %>
+        <table class="events-table">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>
+                        <select id="artistFilter" name="artist">
+                            <option value="">All Artists</option>
+                            <!-- Will be populated dynamically -->
+                        </select>
+                    </th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="eventsTableBody">
+                <% events.forEach(event => { %>
+                    <tr>
+                        <td><%= event.name %></td>
+                        <td><%= event.artist %></td>
+                        <td><%= new Date(event.date).toLocaleDateString() %></td>
+                        <td><%= new Date(event.date).toLocaleTimeString() %></td>
+                        <td>
+                            <a href="/attendee/event/<%= event.id %>">
+                                <button type="button">View Details</button>
+                            </a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No upcoming events at this time.</p>
+    <% } %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Populate artists dropdown in the table header
+            const uniqueArtists = [...new Set(<%- JSON.stringify(events.map(e => e.artist)) %>)];
+            const artistFilter = document.getElementById('artistFilter');
+            uniqueArtists.forEach(artist => {
+                const option = document.createElement('option');
+                option.value = artist;
+                option.textContent = artist;
+                artistFilter.appendChild(option);
+            });
+
+            // Artist filter functionality
+            artistFilter.addEventListener('change', function () {
+                const selectedArtist = this.value;
+                const rows = document.querySelectorAll('#eventsTableBody tr');
+
+                rows.forEach(row => {
+                    const artistCell = row.cells[1].textContent;
+                    const show = !selectedArtist || artistCell === selectedArtist;
+                    row.style.display = show ? '' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

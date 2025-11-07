@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Edit Event</title>
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px;
+        }
+        .ticket-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Event</h1>
+   
+    <form action="/organiser/edit-event/<%= event.id %>" method="post">
+        <div class="form-group">
+            <label for="name">Event Name:</label>
+            <input type="text" id="name" name="name" value="<%= event.name %>" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Event Description:</label>
+            <textarea id="description" name="description" required><%= event.description %></textarea>
+        </div>
+        <div class="form-group">
+            <label for="eventDateTime">Event Date and Time:</label>
+            <input type="datetime-local" id="eventDateTime" name="eventDateTime"
+                   value="<%= event.date.slice(0, 16) %>" required>
+        </div>
+
+        <div class="ticket-section">
+            <h3>Ticket Information</h3>
+            <div class="form-group">
+                <label for="full_price_tickets">Number of Full Price Tickets:</label>
+                <input type="number" id="full_price_tickets" name="full_price_tickets" 
+                       value="<%= event.full_price_tickets %>" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="full_price">Full Price Ticket Cost (£):</label>
+                <input type="number" id="full_price" name="full_price" 
+                       value="<%= event.full_price %>" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="concession_tickets">Number of Concession Tickets:</label>
+                <input type="number" id="concession_tickets" name="concession_tickets" 
+                       value="<%= event.concession_tickets %>" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="concession_price">Concession Ticket Cost (£):</label>
+                <input type="number" id="concession_price" name="concession_price" 
+                       value="<%= event.concession_price %>" min="0" step="0.01" required>
+            </div>
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="/organiser/home">
+        <button type="button">Back to Home</button>
+    </a>
+</body>
+</html>

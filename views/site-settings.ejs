@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Site Settings</title>
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Site Settings Page</h1>
+
+    <form id="siteSettingsForm" action="/organiser/site-settings" method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="siteName">Site Name:</label>
+            <input type="text" id="siteName" name="siteName" value="<%= siteName %>" required>
+            <div id="nameError" class="error">Please enter a site name</div>
+        </div>
+
+        <div class="form-group">
+            <label for="siteDescription">Site Description:</label>
+            <textarea id="siteDescription" name="siteDescription" required><%= siteDescription %></textarea>
+            <div id="descriptionError" class="error">Please enter a site description</div>
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+            const siteName = document.getElementById('siteName').value.trim();
+            const siteDescription = document.getElementById('siteDescription').value.trim();
+            
+            if (!siteName) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            if (!siteDescription) {
+                document.getElementById('descriptionError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('descriptionError').style.display = 'none';
+            }
+            
+            return isValid;
+        }
+    </script>
+</body>
+</html>
